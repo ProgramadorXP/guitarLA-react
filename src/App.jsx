@@ -10,13 +10,13 @@ function App() {
   const MAX_ITEMS = 5; //Limite de cantidad maxima para incrementar en el carrito
 
   const addCart = (item) => { //La funcion recibe el elemento del objeto al que se le da agregar al carrito
-    const itemExist = cart.findIndex( guitar => guitar.id === item.id ); 
-    if( itemExist >= 0) {  //si existe en el carrito
+    const itemExist = cart.findIndex( guitar => guitar.id === item.id );//Se retorna un -1 si el id de la guitarra que se va recorriendo es igual al id del item que llega a la funcion por parametro
+    if( itemExist >= 0) {  //si 'itemExist' es igual o mayor a 0 se de por echo que exite
       if(cart[itemExist].quantity >= MAX_ITEMS) return //Evitando bug de agregar mas productos de los permitidos
       const updateCart = [...cart];// creamos una copia del arreglo original para no 'mutarlo'
       updateCart[itemExist].quantity++;//aumentamos 'quantity' en 1 para el producto
       setCart(updateCart);//Seteamos el carrito con la nueva cantidad del producto
-    } else {//si no existe creamos el producto 
+    } else {//si 'itemExist' es igual a -1 es que no existe
       item.quantity = 1; //agregamos una nueva llave 'quantity' para cada producto y la iniciamos en 1
       setCart([...cart, item]); //actualizamos el carrito con el nuevo producto
     }
