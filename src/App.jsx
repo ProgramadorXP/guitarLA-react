@@ -5,76 +5,76 @@ import { db } from "./data/db";
 
 function App() {
 
-  const [ cart, setCart ] = useState([]);
-  const MIN_ITEMS = 1;
-  const MAX_ITEMS = 5;
+  const [ cart, setCart ] = useState([]); //Estado que almacena los productos de carrito
+  const MIN_ITEMS = 1; //Limite de cantidad minima para decrementar en el carrito
+  const MAX_ITEMS = 5; //Limite de cantidad maxima para incrementar en el carrito
 
-  const addCart = (item) => {
-    const itemExist = cart.findIndex( guitar => guitar.id === item.id );
+  const addCart = (item) => { //La funcion recibe el elemento del objeto al que se le da agregar al carrito
+    const itemExist = cart.findIndex( guitar => guitar.id === item.id ); 
     if( itemExist >= 0) {  //si existe en el carrito
-      if(cart[itemExist].quantity >= MAX_ITEMS) return
-      const updateCart = [...cart];
-      updateCart[itemExist].quantity++;
-      setCart(updateCart);
-    } else {
-      item.quantity = 1;
-      setCart([...cart, item]);
+      if(cart[itemExist].quantity >= MAX_ITEMS) return //Evitando bug de agregar mas productos de los permitidos
+      const updateCart = [...cart];// creamos una copia del arreglo original para no 'mutarlo'
+      updateCart[itemExist].quantity++;//aumentamos 'quantity' en 1 para el producto
+      setCart(updateCart);//Seteamos el carrito con la nueva cantidad del producto
+    } else {//si no existe creamos el producto 
+      item.quantity = 1; //agregamos una nueva llave 'quantity' para cada producto y la iniciamos en 1
+      setCart([...cart, item]); //actualizamos el carrito con el nuevo producto
     }
   };
 
-  const removeFromCart = (id) => {
-    setCart(prevCart => prevCart.filter(guitar => guitar.id !== id));
+  const removeFromCart = (id) => { //Funcion que recibe el id del producto a eliminar
+    setCart(prevCart => prevCart.filter(guitar => guitar.id !== id)); //seteamos el estado del carrito con le id del producto que se quiere eliminar
   };
 
-  const decreaseQuantity = (id) => {
-    const updatedCart = cart.map( item => {
-      if(item.id === id && item.quantity > MIN_ITEMS) {
-        return {
+  const decreaseQuantity = (id) => { //Funcion que recibe el id del producto del cual se decrementa la cantidad
+    const updatedCart = cart.map( item => { //Mapemos el estado del carrito y guardamos la copta en 'updatedCart'
+      if(item.id === id && item.quantity > MIN_ITEMS) {//Si id del item recorrido en el map es igual al id que se obtuvo en la funcion es igual y la cantidad del mismo es mayor a 1
+        return {//Retornamos item donde la condicion se cumplió y decrementamos la cantidad en 1
           ...item,
           quantity: item.quantity - 1
         }
       }
-      return item;
+      return item;//Retornamos el item en el arreglo actualizado para mantenerlo
     });
-    setCart(updatedCart);
+    setCart(updatedCart);//seteamos el arreglo del carrito con el arreglo actualizado
   };
 
-  const increaseQuantity = (id) => {
-    const updatedCart = cart.map( item => {
-      if(item.id === id && item.quantity < MAX_ITEMS) {
-        return {
+  const increaseQuantity = (id) => {//Funcion que recibe el id del producto de cual incrementamos su cantidad
+    const updatedCart = cart.map( item => {//Creamos una copia del arreglo original
+      if(item.id === id && item.quantity < MAX_ITEMS) {//si el id del item en el que va el recorrido es igual al id que se dio click y la cantidad del mismo es menor a 5
+        return {//Retornamos item donde la condicion se cumpló y aumentamo la cantidad de ese item en 1
           ...item,
           quantity: item.quantity + 1
         }
       }
-      return item
+      return item//Retornamos el item en el arreglo actualizado para mantenerlo
     });
-    setCart(updatedCart);
+    setCart(updatedCart);//seteamos el arreglo del carrito con el arreglo actualizado
   };
 
-  const clearCart = () => {
-    setCart([]);
+  const clearCart = () => {//funcion que se encarga de vaciar el carrito
+    setCart([]);//seteamos el arreglo original para eliminar todos los productos dentro
   };
  
   return (
     <>
 
     <Header 
-      cart={cart}
-      removeFromCart={removeFromCart}
-      decreaseQuantity={decreaseQuantity}
-      increaseQuantity={increaseQuantity}
-      clearCart={clearCart}
+      cart={cart}//Enviamos por props el arreglo que guarda los productos del carrito
+      removeFromCart={removeFromCart}//Enviamos la funcion que se encarga de eliminar el producto del carrito
+      decreaseQuantity={decreaseQuantity}//Enviamos la funcion que se encarga de decrementar la cantidad del producto
+      increaseQuantity={increaseQuantity}//Enviamos la funcion que se encarga de incrementar la cantidad del producto
+      clearCart={clearCart}//Enviamos la funcion que se encarga de vaciar el carrito por completo
     />
     
     <main className="container-xl mt-5">
         <h2 className="text-center">Nuestra Colección</h2>
 
         <div className="row mt-5">
-            { db.map((guitar) => <Guitar 
-                                    key={guitar.id} 
-                                    guitar={guitar} 
-                                    addCart={addCart}
+            { db.map(guitar => <Guitar //Mapeamos el componente para mostrarlo segun la longitud del objeto que tiene los productos
+                                    key={guitar.id} //Mandamos la llave key con el id que tiene cada producto y evitar mensaje de advertencia de react
+                                    guitar={guitar} //Mandamos la info de cada guitarra como prop
+                                    addCart={addCart} //Mandamos la funcion que se encarga de agregar el producto al carrito
                                   />
             )}
         </div>

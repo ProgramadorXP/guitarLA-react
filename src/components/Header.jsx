@@ -1,11 +1,13 @@
 /* eslint-disable react/prop-types */
-import { useMemo } from "react"; 
+import { useMemo } from "react"; //Importamos 'useMemo' para mejorar un poco el performance de la app
 
+//Destructuramos el objeto de 'props' recibiendo estado y funciones para el carrito
 const Header = ({ cart, removeFromCart, decreaseQuantity, increaseQuantity, clearCart }) => {
 
-    //state derivado
-    const isEmpty = useMemo( () => cart.length === 0, [cart]);
-    const totalCart = useMemo( () => cart.reduce((total, item) => total + (item.quantity * item.price), 0), [cart]);
+    //STATE DERIVADO
+    //Utilizamos 'useMemo' para el performance de la app y ejecutar el renderizado siempre y cuando el estado de el carrito cambie
+    const isEmpty = useMemo( () => cart.length === 0, [cart]);//Guardamos un boleando en la variable 'isEmpty' dependiendo si el carrito esta vacio o no
+    const totalCart = useMemo( () => cart.reduce((total, item) => total + (item.quantity * item.price), 0), [cart]);//Guardamos el valor total de la suma de todos los productos multiplicando por la cantidad de cada uno
 
     return ( 
         <header className="py-5 header">
@@ -23,9 +25,10 @@ const Header = ({ cart, removeFromCart, decreaseQuantity, increaseQuantity, clea
                             <img className="img-fluid" src="/img/carrito.png" alt="imagen carrito" />
 
                             <div id="carrito" className="bg-white p-3">
-                                { isEmpty ? 
+                                { isEmpty ? //Mostramos el parrafo siguiente en caso de que la variable 'isEmpty' sea true
                                     <p className="text-center">El carrito esta vacio</p>
                                 :
+                                    //Mostramos la tabla con los productos existentes en caso de que la variable 'isEmpty' sea false
                                     <>
                                         <table className="w-100 table">
                                             <thead>
@@ -38,19 +41,23 @@ const Header = ({ cart, removeFromCart, decreaseQuantity, increaseQuantity, clea
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                { cart.map( guitar => (
+                                                { cart.map( guitar => ( //Mapeamos el arreglo del carrito para mostrar el total de productos existentes
                                                     <tr key={guitar.id}>
                                                     <td>
+                                                        {/*Cargamos la image de cada producto agregado segun el mapeo*/}
                                                         <img className="img-fluid" src={`/img/${guitar.image}.jpg`} alt="imagen guitarra" />
                                                     </td>
+                                                    {/*Cargamos el nombre de cada producto agregado segun el mapeo*/}
                                                     <td>{guitar.name}</td>
                                                     <td className="fw-bold">
-                                                            ${guitar.price}
+                                                        {/*Cargamos el precio de cada producto agregado segun el mapeo*/}
+                                                        ${guitar.price}
                                                     </td>
                                                     <td className="flex align-items-start gap-4">
                                                         <button
                                                             type="button"
                                                             className="btn btn-dark"
+                                                            //Agregamos el evento click al boton para decrementar cantidad el cual llama la funcion 'decreaseQuantity' y le pasa el id de la guitarra segun el mapeo
                                                             onClick={() => decreaseQuantity(guitar.id)}
                                                         >
                                                             -
@@ -59,6 +66,7 @@ const Header = ({ cart, removeFromCart, decreaseQuantity, increaseQuantity, clea
                                                         <button
                                                             type="button"
                                                             className="btn btn-dark"
+                                                            //Agregamos el evento click al boton para incrementar cantidad el cual llama la funcion 'increaseQuantity' y le pasa el id de la guitarra segun el mapeo
                                                             onClick={() => increaseQuantity(guitar.id)}
                                                         >
                                                             +
@@ -68,6 +76,7 @@ const Header = ({ cart, removeFromCart, decreaseQuantity, increaseQuantity, clea
                                                         <button
                                                             className="btn btn-danger"
                                                             type="button"
+                                                            //Agregamos el evento click al boton para eliminar el producto el cual llama la funcion 'removeFromCart' y le pasa el id de la guitarra segun el mapeo
                                                             onClick={() => removeFromCart(guitar.id)}
                                                         >
                                                             X
@@ -77,6 +86,7 @@ const Header = ({ cart, removeFromCart, decreaseQuantity, increaseQuantity, clea
                                                 ))}
                                             </tbody>
                                         </table>
+                                        {/*Cargamos el total de todos los productos en el arreglo 'cart'*/}
                                         <p className="text-end">Total pagar: <span className="fw-bold">${totalCart}</span></p>
                                     </>}
                                 <button 
