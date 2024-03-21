@@ -2,8 +2,11 @@ import { useState, useEffect } from "react";
 import Guitar from "./components/Guitar"
 import Header from "./components/Header"
 import { db } from "./data/db";
+import { useCart } from "./hooks/useCart";
 
 function App() {
+
+  useCart();
 
   //Declaramos el estado incial del cart para saber si se quedo con productos al salir ó no
   const initialCart = () => {
