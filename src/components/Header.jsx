@@ -1,13 +1,7 @@
 /* eslint-disable react/prop-types */
-import { useMemo } from "react"; //Importamos 'useMemo' para mejorar un poco el performance de la app
 
 //Destructuramos el objeto de 'props' recibiendo estado y funciones para el carrito
-const Header = ({ cart, removeFromCart, decreaseQuantity, increaseQuantity, clearCart }) => {
-
-    //STATE DERIVADO
-    //Utilizamos 'useMemo' para el performance de la app y ejecutar el renderizado siempre y cuando el estado de el carrito cambie
-    const isEmpty = useMemo( () => cart.length === 0, [cart]);//Guardamos un boleando en la variable 'isEmpty' dependiendo si el carrito esta vacio o no
-    const totalCart = useMemo( () => cart.reduce((total, item) => total + (item.quantity * item.price), 0), [cart]);//Guardamos el valor total de la suma de todos los productos multiplicando por la cantidad de cada uno
+const Header = ({ cart, removeFromCart, decreaseQuantity, increaseQuantity, clearCart, isEmpty, totalCart }) => {
 
     return (
         <header className="py-5 header">
