@@ -1,13 +1,24 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Guitar from "./components/Guitar"
 import Header from "./components/Header"
 import { db } from "./data/db";
 
 function App() {
 
-  const [ cart, setCart ] = useState([]); //Estado que almacena los productos de carrito
+  //Declaramos el estado incial del cart para saber si se quedo con productos al salir ó no
+  const initialCart = () => {
+    const localStorageCart = localStorage.getItem('cart'); //Obtenemos el valor de 'cart' del localStorage y lo guardamos en la variable 'localStorageCart'
+    return localStorageCart ? JSON.parse(localStorageCart) : [] //Retornamos como valor inicial el arreglo con productos si tiene o arreglo vacío si no. Todo esto al momento de recargar la pagina
+  };
+
+  const [ cart, setCart ] = useState(initialCart); //Estado que almacena los productos de carrito
   const MIN_ITEMS = 1; //Limite de cantidad minima para decrementar en el carrito
   const MAX_ITEMS = 5; //Limite de cantidad maxima para incrementar en el carrito
+
+  //Utilizamos un useEffect para ver cuando el 'cart' cambie
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(cart));//Creamos una llave llamada 'cart' en el localStorage con el state del cart
+  },[cart]);//Le decimos al useEffect que cada que cambie el state de cart, se modifique el localStorage de manera Asincrona como trabaja React
 
   const addCart = (item) => { //La funcion recibe el elemento del objeto al que se le da agregar al carrito
     const itemExist = cart.findIndex( guitar => guitar.id === item.id );//Se retorna un -1 si el id de la guitarra que se va recorriendo es igual al id del item que llega a la funcion por parametro

@@ -9,7 +9,7 @@ const Header = ({ cart, removeFromCart, decreaseQuantity, increaseQuantity, clea
     const isEmpty = useMemo( () => cart.length === 0, [cart]);//Guardamos un boleando en la variable 'isEmpty' dependiendo si el carrito esta vacio o no
     const totalCart = useMemo( () => cart.reduce((total, item) => total + (item.quantity * item.price), 0), [cart]);//Guardamos el valor total de la suma de todos los productos multiplicando por la cantidad de cada uno
 
-    return ( 
+    return (
         <header className="py-5 header">
             <div className="container-xl">
                 <div className="row justify-content-center justify-content-md-between">
